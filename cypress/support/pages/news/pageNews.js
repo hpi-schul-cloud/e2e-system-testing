@@ -33,6 +33,7 @@ class News {
   confirmDeletionOnDialogBox () {
     cy.get(News.#deleteNewsConfirmation)
       .contains('Löschen')
+        .should('exist')
       .click()
   }
 
@@ -43,14 +44,17 @@ class News {
   openNewsDetailPage (newsName) {
     cy.get(News.#newsName)
       .contains(newsName)
+        .should('exist')
       .click()
   }
 
   seeCreatedNews (newsTitle, newsDesc) {
     cy.get(News.#newsTitle)
       .contains(newsTitle)
+        .should('exist')
     cy.get(News.#newsDescriptionVisible)
       .contains(newsDesc)
+        .should('exist')
   }
 
   clickOnCreateNewsSaveButton () {

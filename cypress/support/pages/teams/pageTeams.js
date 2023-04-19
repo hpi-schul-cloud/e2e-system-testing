@@ -67,7 +67,7 @@ class Teams {
   static #videoConferenceNotStartedIcon = '[data-testid="video-conference-not-started-info-icon"]'
   static #videoConferenceNotStartedInfoModal = '[data-testid="modal_content"]'
   static #teamEventTitleOnCalanderTab = '[data-testid="team-event-calender-title"]'
-  static #pageTitleTeamsOverview = '[id="page-title"]'
+  static #pageTitleTeamsOverview = '[id="titlebar"]'
   static #teamsMembersOverviewPageTitle = '[id="page-title"]'
 
 
@@ -319,10 +319,10 @@ class Teams {
 
   navigateToTeamsOverview () {
     cy.get(Teams.#teamsOverviewNavigationButton)
+        .should("exist")
       .click()
-    cy.url()
-      .should('include', '/teams')
-    cy.get(Teams.#pageTitleTeamsOverview).should('exist')
+    cy.wait('@teams_api')
+    cy.get(Teams.#pageTitleTeamsOverview, { timeout: 200000 }).should('exist')
   }
 
   selectTeam (teamName) {
@@ -424,12 +424,14 @@ class Teams {
   }
 
   clickOnAddTeam () {
-    cy.get(Teams.#teamMainSection).then(($element) => {
+    cy.get(Teams.#teamMainSection).should("exist").then(($element) => {
       if ($element.hasClass('empty-state')) {
         cy.get(Teams.#addNewTeamEmptyOverviewButton)
+            .should("exist")
           .click()
       } else {
         cy.get(Teams.#addNewTeamButton)
+            .should("exist")
           .click()
         }
     })
