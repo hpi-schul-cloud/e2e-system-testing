@@ -66,13 +66,15 @@ class Courses {
   static #toolsTab = '[data-testid="tools-tab"]'
   static #addToolButton = '[data-testid="add-tool-button"]'
   static #toolConfigurationSelect = '[data-testid="configuration-select"]'
-  static #contextExternalToolConfiguratorPageTitle = '[data-testid="context-external-tool-configurator-title"]'
+  static #contextExternalToolConfiguratorPageTitle =
+    '[data-testid="context-external-tool-configurator-title"]'
   static #groupSelection = '[id="classId_chosen"]'
-  static #chosenStudents= '[id="studentsId_chosen"] > .chosen-choices'
+  static #chosenStudents = '[id="studentsId_chosen"] > .chosen-choices'
   static #toolElements = '[data-testid="external-tool-card-2"]'
   static #errorDialog = '[data-testId="error-dialog"]'
   static #outdatedDialogTitle = '[data-testid="dialog-title"]'
-  static #toolConfigurationSelectItem = '[data-testId="configuration-select-item"]'
+  static #toolConfigurationSelectItem =
+    '[data-testId="configuration-select-item"]'
 
   seeSectionOneAreaOnCourseCreatePage () {
     cy.get(Courses.#sectionOneAreaOnCourseCreationPage).should('exist')
@@ -416,7 +418,7 @@ class Courses {
   }
 
   searchForARoom (roomName) {
-    cy.wait('@rooms_overview_api');
+    cy.wait('@rooms_overview_api')
     cy.get(Courses.#searchFieldRoomOverview).type(roomName)
   }
 
@@ -430,23 +432,27 @@ class Courses {
   }
 
   clearSubstituteTeacherField () {
-    cy.get(Courses.#addSubstituteTeacher).click().type('{selectall}{backspace}')
+    cy.get(Courses.#addSubstituteTeacher).type('{selectall}{backspace}')
   }
 
   addSubstituteTeacher (username) {
-    let userFirstName
-    let userLastName
-    switch (username) {
-      case 'teacher1':
-        userFirstName = Cypress.env('TEACHER_1_BRB_FIRST_NAME')
-        userLastName = Cypress.env('TEACHER_1_BRB_LAST_NAME')
-        break
-      case 'teacher2':
-        userFirstName = Cypress.env('TEACHER_2_BRB_FIRST_NAME')
-        userLastName = Cypress.env('TEACHER_2_BRB_LAST_NAME')
-        break
-    }
-    let userFullName = userLastName + ', ' + userFirstName
+    const usernamePattern = /teacher(\d+)_(\w+)/
+    const [match, teacherNumber, suffix] = username.match(usernamePattern) || []
+
+    const userFirstName = match
+      ? Cypress.env(
+          `TEACHER_${teacherNumber}_${suffix.toUpperCase()}_FIRST_NAME`
+        )
+      : undefined
+    const userLastName = match
+      ? Cypress.env(
+          `TEACHER_${teacherNumber}_${suffix.toUpperCase()}_LAST_NAME`
+        )
+      : undefined
+
+    const userFullName =
+      userLastName && userFirstName ? `${userLastName}, ${userFirstName}` : ''
+
     cy.get(Courses.#chosenResults).contains(userFullName).click()
     cy.get(Courses.#chosenContainer).should('contain', userFullName)
   }
@@ -493,49 +499,69 @@ class Courses {
   }
 
   checkIfGroupIsVisible (groupName) {
-    cy.get(Courses.#groupSelection).find('.chosen-choices').contains(groupName).should('be.visible');
+    cy.get(Courses.#groupSelection)
+      .find('.chosen-choices')
+      .contains(groupName)
+      .should('be.visible')
   }
   checkIfGroupIsNotVisible (groupName) {
-    cy.get(Courses.#groupSelection).find('.chosen-choices').contains(groupName).should('not.exist');
-
-
+    cy.get(Courses.#groupSelection)
+      .find('.chosen-choices')
+      .contains(groupName)
+      .should('not.exist')
   }
 
   checkIfStudentIsVisible (studentName) {
-    cy.get(Courses.#chosenStudents).find('.search-choice').children('span').should('contain', studentName);
+    cy.get(Courses.#chosenStudents)
+      .find('.search-choice')
+      .children('span')
+      .should('contain', studentName)
   }
 
   checkIfStudentIsNotVisible (studentName) {
-    cy.get(Courses.#chosenStudents).should('not.contain', studentName);
+    cy.get(Courses.#chosenStudents).should('not.contain', studentName)
   }
 
   addGroup (groupName) {
-    cy.get(Courses.#groupSelection).find('.chosen-choices').click();
-    cy.get(Courses.#groupSelection).find('.chosen-results').contains(groupName).click();
+    cy.get(Courses.#groupSelection).find('.chosen-choices').click()
+    cy.get(Courses.#groupSelection)
+      .find('.chosen-results')
+      .contains(groupName)
+      .click()
   }
 
   removeGroup (groupName) {
-    cy.get(Courses.#groupSelection).find('.chosen-choices').contains(groupName).siblings('a').click();
+    cy.get(Courses.#groupSelection)
+      .find('.chosen-choices')
+      .contains(groupName)
+      .siblings('a')
+      .click()
   }
 
-  seeOutdatedToolInToolOverview(toolName){
-    cy.get(Courses.#toolElements).contains(toolName).should('exist');
+  seeOutdatedToolInToolOverview (toolName) {
+    cy.get(Courses.#toolElements).contains(toolName).should('exist')
   }
 
-  clickOnTool(toolName){
-    cy.get(Courses.#toolElements).contains(toolName).click();
+  clickOnTool (toolName) {
+    cy.get(Courses.#toolElements).contains(toolName).click()
   }
-  checkIfOutdatedDialogIsOpen(toolName){
-    cy.get(Courses.#outdatedDialogTitle).should('exist');
-    cy.get(Courses.#outdatedDialogTitle).should('contain', toolName);
-    cy.get(Courses.#errorDialog).should('exist');
-    cy.get(Courses.#outdatedDialogTitle).siblings('div').should('have.length', '2')
-    cy.get(Courses.#outdatedDialogTitle).siblings('div').eq(0).find('p')
-        .invoke('text').should('have.length.gt', 0)
+  checkIfOutdatedDialogIsOpen (toolName) {
+    cy.get(Courses.#outdatedDialogTitle).should('exist')
+    cy.get(Courses.#outdatedDialogTitle).should('contain', toolName)
+    cy.get(Courses.#errorDialog).should('exist')
+    cy.get(Courses.#outdatedDialogTitle)
+      .siblings('div')
+      .should('have.length', '2')
+    cy.get(Courses.#outdatedDialogTitle)
+      .siblings('div')
+      .eq(0)
+      .find('p')
+      .invoke('text')
+      .should('have.length.gt', 0)
   }
 
-  checkIfToolIsVisible(toolName) {
-    cy.get(Courses.#toolConfigurationSelectItem).should('not.contain', toolName);
+  checkIfToolIsVisible (toolName) {
+    cy.get(Courses.#toolConfigurationSelectItem).should('not.contain', toolName)
   }
 }
 export default Courses

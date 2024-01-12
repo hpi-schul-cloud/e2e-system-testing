@@ -45,9 +45,17 @@ Cypress.Commands.add('login', (username, environment) => {
         userEmail = 'TEACHER_1_DBC_EMAIL'
         userPassword = 'TEACHER_1_DBC_PASSWORD'
         break
+      case 'teacher2_dbc':
+        userEmail = 'TEACHER_2_DBC_EMAIL'
+        userPassword = 'TEACHER_2_DBC_PASSWORD'
+        break
       case 'student1_brb':
         userEmail = 'STUDENT_1_BRB_EMAIL'
         userPassword = 'STUDENT_1_BRB_PASSWORD'
+        break
+      case 'student2_brb':
+        userEmail = 'STUDENT_2_BRB_EMAIL'
+        userPassword = 'STUDENT_2_BRB_PASSWORD'
         break
       case 'student1_dbc':
         userEmail = 'STUDENT_1_DBC_EMAIL'
@@ -60,6 +68,10 @@ Cypress.Commands.add('login', (username, environment) => {
       case 'teacher1_nbc':
         userEmail = 'TEACHER_1_NBC_EMAIL'
         userPassword = 'TEACHER_1_NBC_PASSWORD'
+        break
+      case 'teacher2_nbc':
+        userEmail = 'TEACHER_2_NBC_EMAIL'
+        userPassword = 'TEACHER_2_NBC_PASSWORD'
         break
       case 'student2_nbc':
         userEmail = 'STUDENT_2_NBC_EMAIL'
@@ -98,7 +110,9 @@ Cypress.Commands.add('login', (username, environment) => {
       })
     } else {
       cy.get(emailInputFieldElement).type(env[userEmail], { log: false })
-      cy.get(passwordInputFieldElement).type(env[userPassword], { log: false })
+      cy.get(passwordInputFieldElement).type(env[userPassword], {
+        log: false
+      })
       cy.get(submitButton).click()
     }
     cy.url().should('contain', '/dashboard')
