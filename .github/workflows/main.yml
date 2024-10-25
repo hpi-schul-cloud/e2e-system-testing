@@ -27,6 +27,8 @@ on:
 jobs:
   configure-load-secrets-and-run_tests:
     runs-on: macos-13
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -80,21 +82,19 @@ jobs:
           working-directory: e2e-system-tests
           command: npm run pretest
 
-      - name: Install Puppeteer
-        run: npm install puppeteer
-
-      - name: Warm up Edge
-        run: |
-          npx puppeteer -- browser='edge' --headless
-
+      # - name: Install Puppeteer
+      #   run: npm install puppeteer
+      # - name: Warm up Edge
+      #   run: |
+      #     npx puppeteer -- browser='edge' --headless
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: e2e-system-tests
           command: npm run ${{ inputs.tag }}
           browser: edge
-        env:
-          CYPRESS_BROWSER_CONNECTION_TIMEOUT: 30000
+        # env:
+        #   CYPRESS_BROWSER_CONNECTION_TIMEOUT: 30000
 
       - name: Generate Report
         if: always()
