@@ -75,12 +75,21 @@ jobs:
           working-directory: e2e-system-tests
           command: npm run pretest
 
+      - name: Install Puppeteer
+        run: npm install puppeteer
+
+      - name: Warm up Edge
+        run: |
+          npx puppeteer -- browser='edge' --headless
+
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: e2e-system-tests
           command: npm run ${{ inputs.tag }}
           browser: edge
+        env:
+          CYPRESS_BROWSER_CONNECTION_TIMEOUT: 30000
 
       - name: Generate Report
         if: always()
