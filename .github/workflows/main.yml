@@ -103,14 +103,14 @@ jobs:
           npm run generate:report
 
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ${{ inputs.groups }}-cypress-report
           path: ${{ github.workspace }}/e2e-system-tests/reports/
 
       - name: Upload Video Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: ${{ inputs.groups }}-cypress-video-artifact
