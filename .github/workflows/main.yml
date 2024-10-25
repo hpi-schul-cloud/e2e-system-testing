@@ -31,13 +31,13 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: hpi-schul-cloud/e2e-system-tests
           path: e2e-system-tests
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
